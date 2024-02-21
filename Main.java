@@ -128,11 +128,7 @@ public class Main {
 
     static boolean winAi(int win) { // try to make it a bit smarter)
 
-        if (moveAi(win))
-            return true;
-        if (moveAi(win - 1))
-            return true;
-        return false;
+        return moveAi(win);
     }
 
     static boolean checkDraw() {
