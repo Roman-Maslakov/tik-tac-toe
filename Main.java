@@ -42,7 +42,8 @@ public class Main {
         try {
             size = Integer.parseInt(scanner.nextLine());
             if (size > 9) {
-                System.out.println("are you realy wanna play this map?) if you're sure contact developer for dlc: +79963907551");
+                System.out.println(
+                        "are you realy wanna play this map?) if you're sure contact developer for dlc: +79963907551");
                 throw new RuntimeException();
             }
             if (size < 3) {
@@ -99,12 +100,17 @@ public class Main {
 
     static void humanTurn() {
 
-        int x;
-        int y;
+        int x = 0;
+        int y = 0;
         do {
-            System.out.print("Input coords x and y separated by space: ");
-            x = scanner.nextInt() - 1;
-            y = scanner.nextInt() - 1;
+            System.out.print("Input coords x and y separated by enter: ");
+            try {
+                x = Integer.parseInt(scanner.nextLine()) - 1;
+                y = Integer.parseInt(scanner.nextLine())- 1;
+            } catch (Exception e) {
+                System.out.println("Can't understand, don't be a dummy");
+                x = Integer.MAX_VALUE;
+            }
         } while (!isCellValid(x, y) || !isCellEmpty(x, y));
         field[x][y] = DOT_HUMAN;
     }
@@ -152,7 +158,8 @@ public class Main {
 
     static boolean moveAi(int win) {
 
-        if (checkWin(DOT_AI, win)) return false; // when it's stuck
+        if (checkWin(DOT_AI, win))
+            return false; // when it's stuck
         for (int i = 0; i < fieldSizeX; i++) {
             for (int j = 0; j < fieldSizeY; j++) {
                 if (isCellEmpty(i, j)) {
