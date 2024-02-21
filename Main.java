@@ -13,7 +13,7 @@ public class Main {
 
     private static final Random random = new Random();
 
-    private static final int WIN_COUNT = 4;
+    private static int win_count = 4;
 
     private static char[][] field;
 
@@ -23,8 +23,11 @@ public class Main {
 
     static void initialize() {
 
-        fieldSizeX = 5;
-        fieldSizeY = 5;
+        System.out.println("Choose for you. Type the size of your field. Field will be a square");
+        fieldSizeX = askSize();
+        fieldSizeY = fieldSizeX;
+        System.out.println("OK, now type a streak of chips required to win");
+        win_count = askWinRow(fieldSizeX);
         field = new char[fieldSizeX][fieldSizeY];
 
         for (int x = 0; x < field.length; x++) {
@@ -32,6 +35,44 @@ public class Main {
                 field[x][y] = DOT_EMPTY;
             }
         }
+    }
+
+    static int askSize() {
+        int size = 0;
+        try {
+            size = Integer.parseInt(scanner.nextLine());
+            if (size > 9) {
+                System.out.println("are you realy wanna play this map?) if you're sure contact developer for dlc: +79963907551");
+                throw new RuntimeException();
+            }
+            if (size < 3) {
+                System.out.println("it will be a boring game, try again");
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            System.out.println("don't mess up, only numbers)");
+            return askSize();
+        }
+        return size;
+    }
+
+    static int askWinRow(int size) {
+        int winRow = 0;
+        try {
+            winRow = Integer.parseInt(scanner.nextLine());
+            if (winRow > size) {
+                System.out.println("it's impossible to win(");
+                throw new RuntimeException();
+            }
+            if (winRow < 3) {
+                System.out.println("it will be an instant game, try again");
+                throw new RuntimeException();
+            }
+        } catch (Exception e) {
+            System.out.println("try again");
+            return askWinRow(size);
+        }
+        return winRow;
     }
 
     static void printField() {
@@ -70,11 +111,11 @@ public class Main {
 
     static void aiTurn() {
 
-        if (winAi(WIN_COUNT))
+        if (winAi(win_count))
             return;
-        if (blockAi(WIN_COUNT))
+        if (blockAi(win_count))
             return;
-        if (predictAi(WIN_COUNT))
+        if (predictAi(win_count))
             return;
         int x;
         int y;
@@ -282,7 +323,7 @@ public class Main {
 
     static boolean checkState(char dot, String s) {
 
-        if (checkWin(dot, WIN_COUNT)) {
+        if (checkWin(dot, win_count)) {
             System.out.println(s);
             return true;
         }
@@ -308,7 +349,7 @@ public class Main {
                     break;
                 aiTurn();
                 printField();
-                if (checkState(DOT_AI, "You lose("))
+                if (checkState(DOT_AI, "You've managed to lose a bot( What's a pity"))
                     break;
             }
 
