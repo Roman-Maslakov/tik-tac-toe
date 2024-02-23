@@ -3,6 +3,12 @@ import java.util.Scanner;
 
 public class Main {
 
+    public static final String ANSI_BLUE = "\u001B[34m";
+
+    public static final String ANSI_RESET = "\u001B[0m";
+
+    public static final String ANSI_RED = "\u001B[31m";
+
     private static final char DOT_HUMAN = 'X';
 
     private static final char DOT_AI = 'O';
@@ -98,6 +104,33 @@ public class Main {
         System.out.println();
     }
 
+    static void printWin(char dot) {
+
+        System.out.print("+");
+        for (int i = 0; i < fieldSizeX; i++) {
+            System.out.print("-" + (i + 1));
+        }
+        System.out.println("-");
+
+        for (int x = 0; x < fieldSizeX; x++) {
+            System.out.print((x + 1) + "|");
+            for (int y = 0; y < field.length; y++) {
+                if (field[x][y] == DOT_HUMAN && field[x][y] == dot) {
+                    System.out.print(ANSI_BLUE + field[x][y] + ANSI_RESET + "|");
+                } else if (field[x][y] == DOT_AI && field[x][y] == dot) {
+                    System.out.print(ANSI_RED + field[x][y] + ANSI_RESET + "|");
+                } else
+                    System.out.print(field[x][y] + "|");
+            }
+            System.out.println();
+        }
+
+        for (int i = 0; i < fieldSizeX * 2 + 2; i++) {
+            System.out.print("-");
+        }
+        System.out.println();
+    }
+
     static void humanTurn() {
 
         int x = 0;
@@ -106,7 +139,7 @@ public class Main {
             System.out.print("Input coords x and y separated by enter: ");
             try {
                 x = Integer.parseInt(scanner.nextLine()) - 1;
-                y = Integer.parseInt(scanner.nextLine())- 1;
+                y = Integer.parseInt(scanner.nextLine()) - 1;
             } catch (Exception e) {
                 System.out.println("Can't understand, don't be a dummy");
                 x = Integer.MAX_VALUE;
@@ -352,12 +385,16 @@ public class Main {
 
                 humanTurn();
                 printField();
-                if (checkState(DOT_HUMAN, "You win!"))
+                if (checkState(DOT_HUMAN, "You win!")) {
+                    printWin(DOT_HUMAN);
                     break;
+                }
                 aiTurn();
                 printField();
-                if (checkState(DOT_AI, "You've managed to lose a bot( What's a pity"))
+                if (checkState(DOT_AI, "You've managed to lose a bot( What's a pity")) {
+                    printWin(DOT_AI);
                     break;
+                }
             }
 
             System.out.println("Wanna play more? Y - for yes");
